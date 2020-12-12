@@ -18,7 +18,7 @@ public class PatientAgent extends Agent {
 	private AID[] patient;
 	private AID[] Bestpatient;
 	protected void setup() {
-		System.out.println(" Patientagent "+getAID().getName()+" arrival");
+		System.out.println(" Patient-agent "+getAID().getName()+" arrival");
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
 			Symptoms = (String) args[0];

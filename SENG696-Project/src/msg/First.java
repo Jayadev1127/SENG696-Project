@@ -15,7 +15,7 @@ public class First extends Agent {
 			public void action() {
 				// send a message to the other agent
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-				msg.setContent("send");
+				msg.setContent("Send");
 				msg.addReceiver(new AID("second", AID.ISLOCALNAME));
 				send(msg);
 			}

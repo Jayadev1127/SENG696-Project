@@ -17,7 +17,7 @@ public class Main {
 		//for(int i=0; i<6;i++){
 		AgentController ac;
 		try {
-			ac=cc.createNewAgent("PatientAgent1", "meetingDoctor.DoctorConfirmingAgent", null);
+			ac=cc.createNewAgent("Patient-Agent1", "meetingDoctor.DoctorConfirmingAgent", null);
 			ac.start();
 			ac=cc.createNewAgent("PatientAgent2", "meetingDoctor.DoctorConfirmingAgent", null);
 			ac.start();

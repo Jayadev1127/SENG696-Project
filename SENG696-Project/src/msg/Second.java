@@ -15,7 +15,7 @@ public class Second extends Agent {
 				public void action() {
 				ACLMessage msg = receive();
 				if(msg != null){
-					JOptionPane.showMessageDialog(null, "message recived : "+msg.getContent());
+					JOptionPane.showMessageDialog(null, "message-recived : "+msg.getContent());
 				}else block();
 				}
 			});
