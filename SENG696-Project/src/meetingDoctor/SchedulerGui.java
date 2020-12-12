@@ -18,7 +18,7 @@ class SchedulerGui extends JFrame {
 		myAgent = a;
 		JPanel p = new JPanel();
 		p.setLayout(new GridLayout(2, 2));
-		p.add(new JLabel("Patient symptoms:"));
+		p.add(new JLabel("Patient-symptoms:"));
 		titleField = new JTextField(15);
 		p.add(titleField);
 		p.add(new JLabel("Approx amount of days with persistent symptoms:"));

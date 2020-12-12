@@ -14,22 +14,22 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class PatientAgent extends Agent {
-	private String targetBookTitle;
-	private AID[] sellerAgents;
-	private AID[] BestSellerAgents;
+	private String Symptoms;
+	private AID[] patient;
+	private AID[] Bestpatient;
 	protected void setup() {
-		System.out.println(" Patient-agent "+getAID().getName()+" arrival");
+		System.out.println(" Patientagent "+getAID().getName()+" arrival");
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
-			targetBookTitle = (String) args[0];
-			System.out.println("Symptoms "+targetBookTitle);
+			Symptoms = (String) args[0];
+			System.out.println("Symptoms "+Symptoms);
 
-			// Add a TickerBehaviour that schedules a request to seller agents every minute
+			
 			addBehaviour(new TickerBehaviour(this, 15000) {
 				protected void onTick() {
 					System.out.println("S"
-							+ ""+targetBookTitle);
-					// Update the list of seller agents
+							+ ""+Symptoms);
+					
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
 					sd.setType("appoinment booking");
@@ -37,12 +37,12 @@ public class PatientAgent extends Agent {
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template); 
 						System.out.println("Found the following patients agents:");
-						sellerAgents = new AID[result.length];
-						 BestSellerAgents = new AID[3];
+						patient = new AID[result.length];
+						 Bestpatient = new AID[3];
 
 						for (int i = 0; i < result.length; ++i) {
-							sellerAgents[i] = result[i].getName();
-							System.out.println(sellerAgents[i].getName());
+							patient[i] = result[i].getName();
+							System.out.println(patient[i].getName());
 						}
 					}
 					catch (FIPAException fe) {
@@ -69,11 +69,11 @@ public class PatientAgent extends Agent {
 
 	
 	private class RequestPerformer extends Behaviour {
-		private AID bestSeller; // The agent who provides the best offer 
+		private AID bestSeller;  
 		private int bestPrice; 
 		private ACLMessage reply2;
-		private int nbestPrice; // The best offered price
-		private int repliesCnt = 0; // The counter of replies from seller agents
+		private int nbestPrice; 
+		private int repliesCnt = 0; 
 		private MessageTemplate mt;
 		private MessageTemplate mt1;// The template to receive replies
 		private int step = 0;
@@ -81,24 +81,24 @@ public class PatientAgent extends Agent {
 		public void action() {
 			switch (step) {
 			case 0:
-				// Send the cfp to all sellers
+				
 				ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-				for (int i = 0; i < sellerAgents.length; ++i) {
-					cfp.addReceiver(sellerAgents[i]);
+				for (int i = 0; i < patient.length; ++i) {
+					cfp.addReceiver(patient[i]);
 				} 
-				cfp.setContent(targetBookTitle);
+				cfp.setContent(Symptoms);
 				cfp.setConversationId("Appointnment booking");
 				cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
-				System.out.println("Patient: hello, i am having "+targetBookTitle+" Can i have an appointment");
+				System.out.println("Patient: hello, i am having "+Symptoms+" Can i have an appointment");
 
 				myAgent.send(cfp);
-				// Prepare the template to get proposals
+				
 				mt = MessageTemplate.and(MessageTemplate.MatchConversationId("Appointnment booking"),
 						MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
 				step = 1;
 				break;
 			case 1:
-				// Receive all proposals/refusals from seller agents
+				
 				ACLMessage reply = myAgent.receive(mt);
 				if (reply != null) {
 					// Reply received
@@ -106,20 +106,20 @@ public class PatientAgent extends Agent {
 					
 
 					if (reply.getPerformative() == ACLMessage.PROPOSE) {
-						// This is an offer 
+						
 						int price = Integer.parseInt(reply.getContent());
-						BestSellerAgents[i]=reply.getSender();
-						System.out.println("---------------"+i+"----"+BestSellerAgents[i]);
+						Bestpatient[i]=reply.getSender();
+						System.out.println("---------------"+i+"----"+Bestpatient[i]);
 						i++;
 						if (bestSeller == null || price < bestPrice) {
-							// This is the best offer at present
+							
 							bestPrice = price;
 							bestSeller = reply.getSender();
 						}
 					}
 					repliesCnt++;
-					if (repliesCnt >= sellerAgents.length) {
-						// We received all replies
+					if (repliesCnt >= patient.length) {
+						
 						step = 2; 
 					}
 				}
@@ -128,50 +128,50 @@ public class PatientAgent extends Agent {
 				}
 				break;
 			case 2:			
-				// Send the cfp to all sellers
+				
 				ACLMessage cfp1 = new ACLMessage(ACLMessage.CFP);
-				for (int i = 0; i < BestSellerAgents.length; ++i) {
-					cfp1.addReceiver(BestSellerAgents[i]);
-					System.out.println("++++++++"+i+"+++++"+BestSellerAgents[i]);
+				for (int i = 0; i < Bestpatient.length; ++i) {
+					cfp1.addReceiver(Bestpatient[i]);
+					System.out.println("++++++++"+i+"+++++"+Bestpatient[i]);
 
 				} 
-				//cfp1.addReceiver(bestSeller);
+				
 				cfp1.setContent("sold");
 				cfp1.setConversationId("book-trade");
 				cfp1.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
-				System.out.println("Patient: Can i have suggestions on  "+targetBookTitle+"?");
+				System.out.println("Patient: Can i have suggestions on  "+Symptoms+"?");
 				bestSeller= null;
 				repliesCnt=0;
 				myAgent.send(cfp1);
-				// Prepare the template to get proposals
+				
 				mt1 = MessageTemplate.and(MessageTemplate.MatchConversationId("Appointnment booking"),
 						MessageTemplate.MatchInReplyTo(cfp1.getReplyWith()));
 				step = 3;
 				break;
 			case 3:
-				// Receive all proposals/refusals from seller agents
+				
 				reply2 = myAgent.receive(mt1);
-				//System.out.println("+++++++reply2 buyer++"+reply2);
+				
 				if (reply2 != null) {
 					// Reply received²
-					//System.out.println("+++++++reply2 != null++"+reply2.getSender());
+				
 
 					if (reply2.getPerformative() == ACLMessage.PROPOSE) {
-						// This is an offer 
+						 
 						int price = Integer.parseInt(reply2.getContent());
-						//System.out.println("++++++++price+++++"+price);
+						
 						
 						if (bestSeller == null || price < nbestPrice) {
-							// This is the best offer at present
+							
 							nbestPrice = price;
 							bestSeller = reply2.getSender();
-							//System.out.println("+++++++bestSeller+++"+bestSeller);
+							
 
 						}
 					}
 					repliesCnt++;
-					if (repliesCnt >= sellerAgents.length) {
-						// We received all replies
+					if (repliesCnt >= patient.length) {
+						
 						step = 4; 
 					}
 				}
@@ -181,26 +181,26 @@ public class PatientAgent extends Agent {
 				break;
 				
 			case 4:
-				// Send the purchase order to the seller that provided the best offer
+				
 				ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
 				order.addReceiver(bestSeller);
-				order.setContent(targetBookTitle);
+				order.setContent(Symptoms);
 				order.setConversationId("Appointnment booking");
 				order.setReplyWith("order"+System.currentTimeMillis());
 				myAgent.send(order);
-				// Prepare the template to get the purchase order reply
+				
 				mt = MessageTemplate.and(MessageTemplate.MatchConversationId("Appointnment booking"),
 						MessageTemplate.MatchInReplyTo(order.getReplyWith()));
 				step = 5;
 				break;
 			case 5:      
-				// Receive the purchase order reply
+				
 				reply = myAgent.receive(mt);
 				if (reply != null) {
-					// Purchase order reply received
+					
 					if (reply.getPerformative() == ACLMessage. INFORM) {
-						// Purchase successful. We can terminate
-						System.out.println(targetBookTitle+" successfully scheduled from agent "+reply.getSender().getName());
+						
+						System.out.println(Symptoms+" successfully scheduled from agent "+reply.getSender().getName());
 						System.out.println("Price = "+nbestPrice);
 						JOptionPane.showMessageDialog(null, "successfully scheduled from agent : "+reply.getSender().getName().split("@")[0]+" with price of "+nbestPrice);
 						myAgent.doDelete();
@@ -221,7 +221,7 @@ public class PatientAgent extends Agent {
 
 		public boolean done() {
 			if (step == 2 && bestSeller == null) {
-				System.out.println("for the mild symptom "+targetBookTitle+" try booking again");
+				System.out.println("for the mild symptom "+Symptoms+" try booking again");
 			}
 			return ((step == 2 && bestSeller == null) || step == 6);
 		}
