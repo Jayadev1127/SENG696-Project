@@ -29,7 +29,7 @@ public class LoginGui extends JFrame implements ActionListener {
       panel.add(message);
       panel.add(submit);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      // Adding the listeners to components..
+      // Adding the listeners to components...
       submit.addActionListener(this);
       add(panel, BorderLayout.CENTER);
       setTitle("Patient Login !!!");
@@ -48,7 +48,7 @@ public class LoginGui extends JFrame implements ActionListener {
     	  
          message.setText(" Hello " + userName + " "+ newLine +"Welcome to SENG-696");
       } else {
-         message.setText(" Invalid user.. ");
+         message.setText(" Invalid user... ");
       }
    }
 }

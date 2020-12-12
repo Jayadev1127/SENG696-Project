@@ -24,7 +24,7 @@ public class DoctorConfirmingAgent extends Agent {
 	Integer price;
 
 	
-	// Put agent initializations here
+	
 	protected void setup() {
 		
 		catalogue = new Hashtable();
@@ -39,7 +39,7 @@ public class DoctorConfirmingAgent extends Agent {
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("Schedule/Appointment booking");
+		sd.setType("Schedule/Appointment- booking");
 		sd.setName("JADE-Appointment_Booking");
 		dfd.addServices(sd);
 		try {
