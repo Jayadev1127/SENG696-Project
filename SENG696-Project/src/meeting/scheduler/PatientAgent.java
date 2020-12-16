@@ -57,7 +57,7 @@ public class PatientAgent extends Agent {
                 //update a list of known participants (DF)
                 DFAgentDescription template = new DFAgentDescription();
                 ServiceDescription sd = new ServiceDescription();
-                sd.setType("participant");
+                sd.setType("doctor");
                 template.addServices(sd);
                 try {
                     DFAgentDescription[] result = DFService.search(myAgent, template);
@@ -99,13 +99,13 @@ public class PatientAgent extends Agent {
             if (msg != null) {
                 Konsole.receiveMeetingRequest(getAID().getLocalName());
                 int day = Integer.parseInt(msg.getContent());
-                String participant = msg.getSender().getLocalName();
+                String doctor = msg.getSender().getLocalName();
 
                 ACLMessage reply = msg.createReply();
 
                 if (day > 0 && day <= Settings.numDays) {
                     // check if is a valid day on calendar according to Settings.Class
-                    setMeetingDetails(participant, day);
+                    setMeetingDetails(doctor, day);
                     reply.setPerformative(ACLMessage.AGREE);
                     reply.setContent("OK");
                 } else {
