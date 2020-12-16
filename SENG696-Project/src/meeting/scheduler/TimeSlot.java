@@ -5,17 +5,23 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class TimeSlot {
-    private double preference;
+    public double preference;
 
     public TimeSlot() {
         this.setPreference(generatePreference(0.3));
+        
     }
 
     private double generatePreference(double probability) {
         double val = roundP(Math.random());
+       // String a = Double.toString(val); 
         if (val < probability)
             return 0.0;
+        
+        //System.out.println("in timeslot:" +val);
         return val;
+        
+        
     }
 
     public double getPreference() {

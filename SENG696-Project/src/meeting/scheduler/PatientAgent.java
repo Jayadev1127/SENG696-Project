@@ -35,13 +35,14 @@ public class PatientAgent extends Agent {
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
             interval = Integer.parseInt(args[0].toString());
+            System.out.println("In loop");
         }
 
         // define agent information
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("scheduler");
+        sd.setType("patient");
         sd.setName("JADE-scheduler");
         dfd.addServices(sd);
         try {
@@ -82,7 +83,7 @@ public class PatientAgent extends Agent {
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
-        System.out.println("Scheduler agent " + getAID().getName() + " terminated.");
+        System.out.println("Patient agent " + getAID().getName() + " terminated.");
     }
 
     public void setMeetingDetails(String name, int value) {
@@ -144,7 +145,7 @@ public class PatientAgent extends Agent {
                     cfp.setContent(Integer.toString(dayOfMeeting));
                     cfp.setConversationId("meeting-handle");
                     cfp.setReplyWith("cfp" + System.currentTimeMillis()); //unique value
-                    cfp.setSender(getAID()); // set which scheduler is sending
+                    cfp.setSender(getAID()); // set which patient is sending
                     myAgent.send(cfp);
                     mt = MessageTemplate.and(MessageTemplate.MatchConversationId("meeting-handle"),
                             MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
@@ -196,7 +197,7 @@ public class PatientAgent extends Agent {
                     pp.setContent(Integer.toString(currTimeSlot));
                     pp.setConversationId("timeslot-preference");
                     pp.setReplyWith("propose" + System.currentTimeMillis()); //unique value
-                    pp.setSender(getAID()); // set which scheduler is sending
+                    pp.setSender(getAID()); // set which patient is sending
                     myAgent.send(pp);
                     mt = MessageTemplate.and(MessageTemplate.MatchConversationId("timeslot-preference"),
                             MessageTemplate.MatchInReplyTo(pp.getReplyWith()));
@@ -265,7 +266,7 @@ public class PatientAgent extends Agent {
                 ap.setContent(Integer.toString(dayOfMeeting) + ";" + Integer.toString(bestTimeSlot));
                 ap.setConversationId("meeting-details");
                 ap.setReplyWith("meeting" + System.currentTimeMillis()); //unique value
-                ap.setSender(getAID()); // set which scheduler is sending
+                ap.setSender(getAID()); // set which patient is sending
                 myAgent.send(ap);
 
                 dayOfMeeting = -1; // -1 flag for not requesting meeting

@@ -47,7 +47,7 @@ public class DoctorAgent extends Agent {
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("participant");
+        sd.setType("doctor");
         sd.setName("JADE-partcipant");
         dfd.addServices(sd);
         try {
@@ -60,10 +60,10 @@ public class DoctorAgent extends Agent {
             protected void onTick() {
                 //search only if meeting was requested
                 if (dayOfMeeting > 0) {
-                    //update a list of known schedulers (DF)
+                    //update a list of known patients (DF)
                     DFAgentDescription template = new DFAgentDescription();
                     ServiceDescription sd = new ServiceDescription();
-                    sd.setType("scheduler");
+                    sd.setType("patient");
                     template.addServices(sd);
                     try {
                         DFAgentDescription[] result = DFService.search(myAgent, template);
@@ -90,7 +90,7 @@ public class DoctorAgent extends Agent {
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
-        System.out.println("Participant agent " + getAID().getName() + " terminated.");
+        System.out.println("Doctor agent " + getAID().getName() + " terminated.");
     }
 
     public void requestMeeting(final int value) {
@@ -130,7 +130,7 @@ public class DoctorAgent extends Agent {
                     req.setContent(Integer.toString(dayOfMeeting));
                     req.setConversationId("meeting-request");
                     req.setReplyWith("request" + System.currentTimeMillis()); //unique value
-                    req.setSender(getAID()); // set which participant is sending
+                    req.setSender(getAID()); // set which doctor is sending
                     myAgent.send(req);
                     mt = MessageTemplate.and(MessageTemplate.MatchConversationId("meeting-request"),
                             MessageTemplate.MatchInReplyTo(req.getReplyWith()));
@@ -178,11 +178,11 @@ public class DoctorAgent extends Agent {
                 ACLMessage msg = myAgent.receive(mt);
                 if (msg != null) {
                     day = Integer.parseInt(msg.getContent());
-                    String scheduler = msg.getSender().getLocalName();
+                    String patient = msg.getSender().getLocalName();
 
                     ACLMessage reply = msg.createReply();
 
-                    System.out.println(getAID().getLocalName() + ": " + scheduler + " is asking if I can meet on day "
+                    System.out.println(getAID().getLocalName() + ": " + patient + " is asking if I can meet on day "
                             + day);
 
                     if (isDayAvailable(day)) {
