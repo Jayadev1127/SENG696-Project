@@ -89,7 +89,8 @@ public class PatientAgent extends Agent {
 				cfp.setContent(Symptoms);
 				cfp.setConversationId("Appointnment booking");
 				cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
-				System.out.println("Patient: hello, i am having "+Symptoms+" Can i have an appointment");
+				System.out.println("Doctor: Hello, how can i help you");
+				
 
 				myAgent.send(cfp);
 				
