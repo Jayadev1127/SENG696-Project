@@ -163,7 +163,7 @@ public class PatientAgent extends Agent {
                 if (reply != null) {
                     // Checks who wants to take part in meeting
                     if (reply.getPerformative() == ACLMessage.AGREE) {
-                        System.out.println(getAID().getLocalName() + ": " + reply.getSender().getLocalName() +
+                        System.out.println(reply.getSender().getLocalName() + ": " + getAID().getLocalName() +
                         " says that can meet on day " + dayOfMeeting);
                         elems.add(reply.getSender());
                     }

@@ -16,7 +16,6 @@ import jade.lang.acl.MessageTemplate;
 
 public class DoctorAgent extends Agent {
     public AID[] contactList;
-
     private DoctorGui gui;
     private Calendar calendar;
     private int interval;
@@ -30,6 +29,7 @@ public class DoctorAgent extends Agent {
         dayOfMeeting = -1; // -1 flag for not requesting meeting
 
         // init gui
+        
         gui = new DoctorGui(this);
         gui.display();
 
@@ -182,7 +182,7 @@ public class DoctorAgent extends Agent {
 
                     ACLMessage reply = msg.createReply();
 
-                    System.out.println(getAID().getLocalName() + ": " + patient + " is asking if I can meet on day "
+                    System.out.println(patient + ": " + getAID().getLocalName() + " is asking if I can meet on day "
                             + day);
 
                     if (isDayAvailable(day)) {

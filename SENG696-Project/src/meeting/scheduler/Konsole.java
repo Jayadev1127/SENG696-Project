@@ -59,7 +59,7 @@ public class Konsole {
     }
 
     public static void noMeeting(String name) {
-        System.out.println(ANSI_YELLOW + name + ": No participants available for this meeting..." + ANSI_RESET);
+        System.out.println(ANSI_YELLOW + name + ": Please state your symptoms." + ANSI_RESET);
     }
 
     public static void terminalSplit(int num) {
