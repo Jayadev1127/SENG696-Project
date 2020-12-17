@@ -16,7 +16,8 @@ import jade.lang.acl.MessageTemplate;
 
 public class DoctorAgent extends Agent {
     public AID[] contactList;
-    private DoctorGui gui;
+    private LoginGui lgngui;
+    //private DoctorGui gui;
     private Calendar calendar;
     private int interval;
     private int dayOfMeeting;
@@ -30,8 +31,9 @@ public class DoctorAgent extends Agent {
 
         // init gui
         
-        gui = new DoctorGui(this);
-        gui.display();
+        lgngui = new LoginGui(this);
+        lgngui.display();
+        
 
         // welcome message
         Konsole.welcome(getAID().getLocalName());
