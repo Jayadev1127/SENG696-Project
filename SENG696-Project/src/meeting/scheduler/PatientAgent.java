@@ -110,6 +110,7 @@ public class PatientAgent extends Agent {
                     reply.setContent("OK");
                 } else {
                     // not a valid day
+                	System.out.println("Slot is not available on requested day");
                     reply.setPerformative(ACLMessage.REFUSE);
                     reply.setContent("not-available");
                 }
