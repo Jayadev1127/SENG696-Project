@@ -27,8 +27,8 @@ public class PatientAgent extends Agent {
 			
 			addBehaviour(new TickerBehaviour(this, 15000) {
 				protected void onTick() {
-					System.out.println("S"
-							+ ""+Symptoms);
+					System.out.println(
+							 ""+Symptoms);
 					
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
@@ -89,8 +89,9 @@ public class PatientAgent extends Agent {
 				cfp.setContent(Symptoms);
 				cfp.setConversationId("Appointnment booking");
 				cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
-				System.out.println("Doctor: Hello, how can i help you");
-				
+				System.out.println("Patient: Hello doctor");
+				System.out.println("Doctor: Hello, your profile states that you are suffering from " +Symptoms);
+				System.out.println("Doctor: Please visit the hospital " );
 
 				myAgent.send(cfp);
 				

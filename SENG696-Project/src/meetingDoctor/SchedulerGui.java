@@ -17,7 +17,7 @@ class SchedulerGui extends JFrame {
 		
 		myAgent = a;
 		JPanel p = new JPanel();
-		p.setLayout(new GridLayout(2, 2));
+		p.setLayout(new GridLayout(6, 2));
 		p.add(new JLabel("Name:"));
 		nameField = new JTextField(15);
 		p.add(nameField);
